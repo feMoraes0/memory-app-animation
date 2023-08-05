@@ -6,30 +6,24 @@ import { ImageBackground, Container } from './styles';
 
 const { height: kScreenHeight, width: kScreenWidth } = Dimensions.get('screen');
 const kInitialContainerSize = 100;
+const kCenterContainerPosition = (kScreenHeight - kInitialContainerSize) / 2;
 
 const Main = () => {
   const translateY = new Animated.Value(0);
-  const width = new Animated.Value(kInitialContainerSize);
-  const height = new Animated.Value(kInitialContainerSize);
+  const resizeAnimation = new Animated.Value(0);
 
   useEffect(() => {
     const parallelDuration = 800;
 
     Animated.sequence([
       Animated.spring(translateY, {
-        toValue: (kScreenHeight - kInitialContainerSize) / 2,
+        toValue: kCenterContainerPosition,
         bounciness: 16,
         useNativeDriver: false,
       }),
-
       Animated.parallel([
-        Animated.timing(height, {
+        Animated.timing(resizeAnimation, {
           toValue: 1,
-          duration: parallelDuration,
-          useNativeDriver: false,
-        }),
-        Animated.timing(width, {
-          toValue: kScreenWidth,
           duration: parallelDuration,
           useNativeDriver: false,
         }),
@@ -46,8 +40,14 @@ const Main = () => {
     <ImageBackground source={MainBackgroundImage as ImageSourcePropType} resizeMode="cover">
       <Container
         style={{
-          width,
-          height,
+          width: resizeAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [kInitialContainerSize, kScreenWidth],
+          }),
+          height: resizeAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [kInitialContainerSize, kScreenHeight],
+          }),
           transform: [{ translateY }],
         }}
       />
