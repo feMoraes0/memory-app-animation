@@ -1,8 +1,8 @@
+import MainBackgroundImage from '@assets/images/main-background.png';
 import { useEffect } from 'react';
 import { Animated, ImageSourcePropType, Dimensions } from 'react-native';
 
 import { ImageBackground, Container } from './styles';
-import MainBackgroundImage from '../../images/main-background.png';
 
 const { height: kScreenHeight, width: kScreenWidth } = Dimensions.get('screen');
 const kInitialContainerSize = 100;
@@ -24,7 +24,7 @@ const Main = () => {
 
       Animated.parallel([
         Animated.timing(height, {
-          toValue: kScreenHeight,
+          toValue: 1,
           duration: parallelDuration,
           useNativeDriver: false,
         }),
